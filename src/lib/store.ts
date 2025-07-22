@@ -35,12 +35,6 @@ export const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 export const makeStore = () => {
-  if (typeof window === "undefined") {
-    return configureStore({
-      reducer: {
-        counters,
-      },
-    });
-  }
+  if (typeof window === "undefined") return
   return persistStore(store);
 };
