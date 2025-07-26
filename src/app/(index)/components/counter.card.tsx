@@ -3,6 +3,7 @@
 import { Counter } from "@/lib/types/counter";
 import { Card, CardBody, CardFooter } from "@heroui/react";
 import moment from "moment";
+import { useMemo } from "react";
 
 export function CountersCard({
   data,
@@ -17,6 +18,14 @@ export function CountersCard({
     : createDate;
   const now = moment();
 
+  const lastStreak = useMemo(() => {
+    if (data.resets.length <= 1) return createDate.get("day");
+    return now.diff(
+      moment(data.resets[data.resets.length - 1].createDate),
+      "day"
+    );
+  }, [data.resets, createDate, now]);
+
   return (
     <Card
       className="p-4 hover:shadow bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 gap-4"
@@ -30,7 +39,7 @@ export function CountersCard({
             backgroundColor: data.color ?? "hsl(var(--heroui-primary-500))",
           }}
         >
-          {now.diff(createDate, "day")} Day
+          {lastStreak} Day
         </div>
       </CardBody>
       <CardFooter className="flex-col items-start p-0">
